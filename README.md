@@ -25,7 +25,7 @@ So this could be useful for any project which wants to ship a single entrypoint 
 ## Using this template in your project
 
 1. Start by copying the contents of this repository to your project. However, you probably won't want this `README.md`.
-2. You may want to rename the `cli.sh` script, or leave the name as is, it doesn't matter what the name is, as long as any references in the `docs` and `tests` directory are also updated.
+2. You may want to rename the `cli.sh` script, or leave the name as is, it doesn't matter what the name is, as long as any references in the `.github`, `docs` and `tests` directory are also updated.
 3. Consider adding something like the following section to your own `README.md`
   ```markdown
   To install the CLI, create a symlink: `ln -s cli.sh /usr/bin/cli`
