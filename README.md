@@ -2,6 +2,12 @@
 
 A simple CLI script for wrapping Bash scripts in a single command.
 
+## Who is this for
+
+I created this template project because I wanted to have a simple CLI wrapper for some of my other projects.
+
+So this could be useful for any project which wants to ship a single entrypoint script to a bunch of different scripts.
+
 ## Features
 
 * A simple `cli.sh` script which handles displaying a list of commands, help information and running scripts as sub-commands.
