@@ -3,7 +3,7 @@
 # Simple CLI wrapper that discovers scripts in the commands/ directory
 
 # Cd to the directory of this script, so it can be run from anywhere
-cd "$(dirname "$0")" || exit 1
+cd "$(dirname "$(realpath "$0")")" || exit 1
 
 # Color codes
 RESET="\e[0m"
