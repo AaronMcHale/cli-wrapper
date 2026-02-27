@@ -13,6 +13,7 @@ PROJECT_ROOT="$(dirname "$(dirname "$(realpath "$0")")")"
 cleanup() {
   rm "$PROJECT_ROOT/$TEST_CMD_PATH" || true
   rm "$PROJECT_ROOT/$HELP_TXT_PATH" || true
+  rm "$PROJECT_ROOT/tests/cli-symlink.sh" || true
 }
 trap cleanup EXIT
 
@@ -39,6 +40,18 @@ cd tests
 OUT=$(./../cli.sh)
 if [[ "$OUT" != *"$TEST_CMD"* ]]; then
   echo "FAIL: Test command $TEST_CMD not found when running from tests dir"
+  exit 1
+fi
+cd ..
+echo "OK"
+echo
+
+echo "Testing cli.sh as a symlink from tests directory, to proove that it can be run as a symlink from anywhere..."
+cd tests
+ln -s ../cli.sh ./cli-symlink.sh
+OUT=$(./cli-symlink.sh)
+if [[ "$OUT" != *"$TEST_CMD"* ]]; then
+  echo "FAIL: Test command $TEST_CMD not found when running cli.sh as a symlink from tests dir"
   exit 1
 fi
 cd ..
