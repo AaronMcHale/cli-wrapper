@@ -24,4 +24,5 @@ Using the same `hello-world` example, running `cli.sh help hello-world` would re
 
 * `$CMD` is the name of the command being run, all positional arguments have been shifted, so `$1` is not the name of the command, instead it is the first argument passed after the name of the command. Checking if `$#` is `0` is a quick way to know if the user provided any additional arguments.
 * The function `command_exists` will check if a given command exists, for example `command_exists "hello-world"` will return `0` if `hello-world` is a command, otherwise `1`.
+* To print error, warning and success messages, the functions `error`, `warning` and `success` are provided, all arguments passed to these will be printed.
 * Some formatting variables are provided which can be used to format output: `${RESET}` `${RED}` `${GREEN}` `${YELLOW}` `${BLUE}`

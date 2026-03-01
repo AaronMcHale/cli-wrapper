@@ -1,3 +1,7 @@
-Prints hello world.
+Example hello world command.
 
-Just a simple hello world command.
+Includes examples of using the helper functions.
+
+Only the first line of this file shows next to the command when showing the command list.
+The rest of this file will show when running the `help` sub-command
+Try running `help hello-world` to see for yourself!

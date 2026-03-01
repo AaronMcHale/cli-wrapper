@@ -5,6 +5,42 @@
 # Cd to the directory of this script, so it can be run from anywhere
 cd "$(dirname "$(realpath "$0")")" || exit 1
 
+####################
+# Helper functions #
+####################
+
+# Prints a warning message without exiting.
+# Usage: warning <message>...
+warning() {
+  local msg="$@"
+  printf "\e[43m\e[30m[warning]\e[0m %s\n" "$msg"
+}
+
+# Prints a error message without exiting.
+# Usage: error <message>...
+error() {
+  local msg="$@"
+  printf "\e[41m\e[39m[error] %s\e[0m\n" "$msg"
+}
+
+# Prints a success message without exiting.
+# Usage: error <message>...
+success() {
+  local msg="$@"
+  printf "\e[42m\e[30m[success]\e[0m %s\n" "$msg"
+}
+
+# Check if a command exists
+# Usage: command_exists <command>
+# Returns 0 if command exists, 1 otherwise.
+command_exists() {
+  local needle="$1"
+  for v in "${commands[@]}"; do
+    [ "$v" = "$needle" ] && return 0
+  done
+  return 1
+}
+
 # Color codes
 RESET="\e[0m"
 # shellcheck disable=SC2034
@@ -13,6 +49,10 @@ GREEN="\e[32m"
 YELLOW="\e[33m"
 # shellcheck disable=SC2034
 BLUE="\e[34m"
+
+##################
+# Command loader #
+##################
 
 # Build commands list from commands/*.sh (lowercased, without .sh)
 commands=()
@@ -56,17 +96,6 @@ if [ "$CMD" = "list" ]; then
   done
   exit 0
 fi
-
-# Check if a command exists
-# Usage: command_exists <command>
-# Returns 0 if command exists, 1 otherwise.
-command_exists() {
-  local needle="$1"
-  for v in "${commands[@]}"; do
-    [ "$v" = "$needle" ] && return 0
-  done
-  return 1
-}
 
 if [ "$CMD" = "help" ] || [ "$CMD" = "--help" ]; then
   if [ -z "$1" ]; then

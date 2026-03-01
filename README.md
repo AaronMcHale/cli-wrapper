@@ -16,6 +16,7 @@ So this could be useful for any project which wants to ship a single entrypoint 
 * Scripts in the `commands` directory can also provide a `.help.txt` file which is displayed when running the `help` sub-command, and the first line of the file is used as the description in the command `list`.
 * Most existing Bash scripts will work as is, no special functions are needed, scripts are sourced and invoked arguments are shifted before command script is sourced, so `$2` becomes `$1` for the command script.
 * Formatting variables for `RESET` `RED` `GREEN` `YELLOW` `BLUE` are provided.
+* Helper functions for printing error, warning and success messages.
 * The `cli.sh` script supports being run from anywhere in the system. For example, this means it can be symlinked to `/usr/bin` and it will work.
 
 ## Docs
