@@ -77,6 +77,25 @@ fi
 echo "OK"
 echo
 
+echo "Test that a second line in the help file does not show on command list..."
+echo "this line should not show on the command list" >> "$HELP_TXT_PATH"
+OUT=$(./cli.sh list)
+if [[ "$OUT" = *"this line should not show on the command list"* ]]; then
+  echo "FAIL: $HELP_TXT_PATH content not found in cli.sh list output"
+  exit 1
+fi
+echo "OK"
+echo
+
+echo "But that it does show when running help $TEST_CMD..."
+OUT=$(./cli.sh help $TEST_CMD)
+if [[ "$OUT" != *"this line should not show on the command list"* ]]; then
+  echo "FAIL: $HELP_TXT_PATH content not found in cli.sh list output"
+  exit 1
+fi
+echo "OK"
+echo
+
 echo "Testing cli.sh help $TEST_CMD to check output..."
 OUT=$(./cli.sh help $TEST_CMD)
 if [[ "$OUT" != *"this is a test command"* ]]; then
