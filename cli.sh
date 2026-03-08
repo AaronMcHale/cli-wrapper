@@ -3,7 +3,8 @@
 # Simple CLI wrapper that discovers scripts in the commands/ directory
 
 # Cd to the directory of this script, so it can be run from anywhere
-cd "$(dirname "$(realpath "$0")")" || exit 1
+realpath="$(realpath "$0")"
+cd "${realpath%/*}"
 
 ####################
 # Helper functions #

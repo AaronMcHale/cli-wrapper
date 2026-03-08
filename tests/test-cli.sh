@@ -2,7 +2,7 @@
 set -e
 
 # Cd to the directory of this script
-cd "$(dirname "$0")" || exit 1
+cd "${0%/*}"
 
 # Test variables
 TEST_CMD="test-$(( RANDOM % 900000 + 100000 ))"
