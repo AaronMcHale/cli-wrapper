@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -eu
 
 # Cd to the directory of this script
 cd "${0%/*}"

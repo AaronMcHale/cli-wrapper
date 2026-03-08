@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -u
 
 # Simple CLI wrapper that discovers scripts in the commands/ directory
 
