@@ -4,6 +4,8 @@
 
 Create a new `.sh` script in the `commands` directory, the name of the script is the name of the command.
 
+Note that these scripts do not need to be executable, they only need to end in `.sh`.
+
 Running `cli.sh` or `cli.sh list` will then show the newly created command.
 
 When running `cli.sh` followed by the name of the command, the shell script for the command will be sourced as is. This means that commands do not need to use any specific functions to run.

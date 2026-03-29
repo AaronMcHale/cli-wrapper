@@ -21,4 +21,4 @@ jobs:
       - name: Run tests
         run: |
           cd tests
-          ./test-cli.sh
+          ./run-tests.sh
