@@ -4,8 +4,8 @@ set -u
 # Simple CLI wrapper that discovers scripts in the commands/ directory
 
 # Cd to the directory of this script, so it can be run from anywhere
-realpath="$(realpath "$0")"
-cd "${realpath%/*}"
+realpath="$(realpath "$0")" || { echo "Failed to get realpath"; exit 1; }
+cd "${realpath%/*}" || { echo "Failed to cd to script directory"; exit 1; }
 
 ####################
 # Helper functions #
@@ -14,21 +14,21 @@ cd "${realpath%/*}"
 # Prints a warning message without exiting.
 # Usage: warning <message>...
 warning() {
-  local msg="$@"
+  local msg="$*"
   printf "\e[43m\e[30m[warning]\e[0m %s\n" "$msg"
 }
 
 # Prints a error message without exiting.
 # Usage: error <message>...
 error() {
-  local msg="$@"
+  local msg="$*"
   printf "\e[41m\e[39m[error] %s\e[0m\n" "$msg"
 }
 
 # Prints a success message without exiting.
-# Usage: error <message>...
+# Usage: success <message>...
 success() {
-  local msg="$@"
+  local msg="$*"
   printf "\e[42m\e[30m[success]\e[0m %s\n" "$msg"
 }
 
