@@ -20,7 +20,7 @@ test_cli_output_for_test_cmd() {
     echo "FAIL: Test command test-cmd not found in cli.sh output."
     return 1
   fi
-  cd tests
+  cd tests || { echo "Failed to cd back to tests directory"; return 1; }
 }
 
 test_cli_from_tests_dir() {
