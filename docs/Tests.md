@@ -10,7 +10,7 @@ The test runner finds all shell scripts in `./tests` which start with `test-` an
 
 Each test file is sourced in a sub-shell, this means that variables and functions defined in test files should not leak out of the test file.
 
-## Structure of a test file
+## Structure of a test file
 
 A test file may contian:
 
