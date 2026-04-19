@@ -3,9 +3,16 @@ set -u
 
 # Simple CLI wrapper that discovers scripts in the commands/ directory
 
-# Cd to the directory of this script, so it can be run from anywhere
+# Get the directory of this script, so it can be run from anywhere
 realpath="$(realpath "$0")" || { echo "Failed to get realpath"; exit 1; }
-cd "${realpath%/*}" || { echo "Failed to cd to script directory"; exit 1; }
+
+# `CLIROOT` is the directory of the cli script.
+# Commands are run from the directory the user is in,
+# use `$CLIROOT` to cd to the directory of the cli script.
+CLIROOT="${realpath%/*}"
+
+# `CMDROOT` absolute path to commands directory.
+CMDROOT="$CLIROOT/commands"
 
 ####################
 # Helper functions #
@@ -58,8 +65,8 @@ BLUE="\e[34m"
 
 # Build commands list from commands/*.sh (lowercased, without .sh)
 commands=()
-if [ -d "commands" ]; then
-  for f in commands/*.sh; do
+if [ -d "$CMDROOT" ]; then
+  for f in "$CMDROOT"/*.sh; do
     [ -f "$f" ] || continue
     name=$(basename "$f" .sh)
     name_lc=${name,,}
@@ -90,7 +97,7 @@ if [ "$CMD" = "list" ]; then
 
   for c in "${commands[@]}"; do
     desc=""
-    helpfile="commands/${c}.help.txt"
+    helpfile="$CMDROOT/${c}.help.txt"
     if [ -f "$helpfile" ]; then
       IFS= read -r desc < "$helpfile" || true
     fi
@@ -100,14 +107,15 @@ if [ "$CMD" = "list" ]; then
 fi
 
 if [ "$CMD" = "help" ] || [ "$CMD" = "--help" ]; then
-  if [ -z "$1" ]; then
+  if [ "$#" -eq 0 ]; then
     echo "Display help for a command."
     echo "Usage: help [command]"
     exit 0
   fi
   target=${1,,}
-  if command_exists "$target" && [ -f "commands/${target}.help.txt" ]; then
-    cat "commands/${target}.help.txt"
+  helpfile="$CMDROOT/${target}.help.txt"
+  if command_exists "$target" && [ -f "$helpfile" ]; then
+    cat "$helpfile"
     exit 0
   fi
   echo "No help available for $target"
@@ -121,5 +129,5 @@ if ! command_exists "$CMD"; then
 fi
 
 # Source the script matching CMD
-# shellcheck source=/dev/null
-. "commands/${CMD}.sh"
+# shellcheck disable=SC1090
+source "$CMDROOT/$CMD.sh"
