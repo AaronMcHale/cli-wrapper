@@ -129,4 +129,5 @@ if ! command_exists "$CMD"; then
 fi
 
 # Source the script matching CMD
+# shellcheck disable=SC1090
 source "$CMDROOT/$CMD.sh"
