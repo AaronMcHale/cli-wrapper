@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Tests for warning, error, and success output formatting
 
 setup() {
