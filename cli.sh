@@ -129,5 +129,4 @@ if ! command_exists "$CMD"; then
 fi
 
 # Source the script matching CMD
-# shellcheck source=/dev/null
-source -p "$CMDROOT" "$CMD.sh"
+source "$CMDROOT/$CMD.sh"
