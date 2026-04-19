@@ -23,6 +23,7 @@ So this could be useful for any project which wants to ship a single entrypoint 
 ## Docs
 
 [Read the CLI docs for more information on how commands works.](docs/CLI.md)
+
 [Read the Tests docs for more information on how to write tests.](docs/Tests.md)
 
 ## Using this template in your project

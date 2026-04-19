@@ -3,6 +3,11 @@ echo "Hello world!"
 
 # Examples of using the helper functions to print messages.
 
+# You can cd to the directory of the cli script using `$CLIROOT`
+cd "$CLIROOT"
+# You can also cd to the commands directory using `$CMDROOT`
+cd "$CMDROOT"
+
 # You can check if a command exists and do something
 command_exists "hello-world" && echo "hello world exists!"
 
