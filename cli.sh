@@ -3,13 +3,14 @@ set -u
 
 # Simple CLI wrapper that discovers scripts in the commands/ directory
 
-# Get the directory of this script, so it can be run from anywhere
-realpath="$(realpath "$0")" || { echo "Failed to get realpath"; exit 1; }
-
-# `CLIROOT` is the directory of the cli script.
-# Commands are run from the directory the user is in,
-# use `$CLIROOT` to cd to the directory of the cli script.
-CLIROOT="${realpath%/*}"
+# `CLIROOT` is the directory of the CLI script when executed, or the current
+# directory when sourced.
+if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
+  CLIROOT="$PWD"
+else
+  realpath="$(realpath "$0")" || { echo "Failed to get realpath"; exit 1; }
+  CLIROOT="${realpath%/*}"
+fi
 
 # `CMDROOT` absolute path to commands directory.
 CMDROOT="$CLIROOT/commands"
@@ -74,6 +75,11 @@ if [ -d "$CMDROOT" ]; then
   done
 fi
 commands+=("help" "list")
+
+# Sourcing the CLI loads its helpers and command list without dispatching a command.
+if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
+  return 0
+fi
 
 # CMD is $1 lowercased, default to "list"
 CMD=${1:-list}
