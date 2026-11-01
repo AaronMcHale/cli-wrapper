@@ -35,7 +35,11 @@ run_tests() {(
   # If a setup function is defined, run it before the tests
   if [[ $(declare -F setup) ]]; then
     echo -e "Running setup for $test_file...\n"
-    setup
+    if ! setup; then
+      echo -e "FAIL: setup for $test_file returned a non-zero exit code.\n"
+      # We are in subshell, so can exit with 1, and trap will run teardown if defined
+      exit 1
+    fi
   fi
 
   # Discover and run all test_ functions in one loop
