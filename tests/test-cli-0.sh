@@ -47,6 +47,25 @@ test_cli_list_output() {
   fi
 }
 
+test_sourcing_cli_is_silent_and_uses_current_directory() {
+  echo "Testing sourcing cli.sh is silent and sets CLIROOT to the current directory"
+  local output expected_cli_root
+  expected_cli_root="$(cd "$TEST_DIR/.." && pwd)" || return 1
+  output=$(bash -c '
+    cd "$1" || exit 1
+    source "$2"
+    command_exists "test-cmd" || exit 1
+    printf "%s" "$CLIROOT"
+  ' bash "$expected_cli_root" "$expected_cli_root/cli.sh" 2>&1) || {
+    echo "FAIL: Sourcing cli.sh did not expose its helpers."
+    return 1
+  }
+  if [[ "$output" != "$expected_cli_root" ]]; then
+    echo "FAIL: Expected only CLIROOT ($expected_cli_root), got: $output"
+    return 1
+  fi
+}
+
 test_list_output_for_test_cmd_help() {
   echo "Testing help text file file for test command"
   if [[ "$(./../cli.sh list)" != *"this is a test command"* ]]; then
