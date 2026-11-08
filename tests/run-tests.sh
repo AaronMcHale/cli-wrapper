@@ -3,22 +3,20 @@ set -u
 
 # Run all test_ functions in test-*.sh scripts
 
-# Cd to the directory of this script, so it can be run from anywhere
+# Get the absolute path to the tests directory.
 realpath="$(realpath "$0")" || { echo "Failed to get realpath"; exit 1; }
-cd "${realpath%/*}" || { echo "Failed to cd to script directory"; exit 1; }
-
-# Save the current directory if tests need a absolute path reference
-# shellcheck disable=SC2034
-TEST_DIR="$PWD"
+TESTROOT="${realpath%/*}"
 
 # Run a test file.
 # Uses a subshell so that each test file is isolated.
 # Usage: run_tests "test-file.sh"
 run_tests() {(
-  local test_file="$1"
-  echo -e "Running tests in $test_file...\n"
+  local test_path="$1"
+  local test_file="${1##*/}"
+  echo -e "Running tests in $test_file..."
+  echo -e "Path: $test_path\n"
   # shellcheck disable=SC1090
-  source "$test_file"
+  source "$test_path"
 
   # As we're running in a subshell, we can use trap to run teardown and print message on exit.
   # shellcheck disable=SC2329
@@ -56,7 +54,14 @@ run_tests() {(
   done < <(declare -F)
 )}
 
-TEST_FILES=(test-*.sh)
+# If test files are provided, run only those specific tests.
+# Otherwise, run all test-*.sh files in the tests directory.
+if [[ $# -gt 0 ]]; then
+  TEST_FILES=("$@")
+else
+  TEST_FILES=("$TESTROOT"/test-*.sh)
+fi
+
 for test_file in "${TEST_FILES[@]}"; do
   # Confirm that test_file is a file and is not empty before trying to run it
   if [[ -f "$test_file" && -s "$test_file" ]]; then
