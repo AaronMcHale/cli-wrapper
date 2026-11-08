@@ -15,30 +15,30 @@ Instructions:
 - Use `return 0` for success and `return 1` for failure.
 - Write code procedurally inside test functions and always return early when errors occur; do not use subshells or pipelines that would prevent returning the correct exit code.
 - Do not use `exit` inside test functions.
-- Use the `$TEST_DIR` variable when referencing paths in tests.
+- Use the `$TESTROOT` variable when referencing paths in tests.
 - Ensure cleanup is performed in `teardown` function when necessary.
 
 Example test file:
 ```Bash
 # Example setup function
 setup() {
-  echo 'echo "Test command executed"' > "$TEST_DIR/../commands/test-cmd.sh"
+  cd "$TESTROOT/.."
+  echo 'echo "Test command executed"' > "./commands/test-cmd.sh"
 }
 
 # Example test function
 test_cli_output_for_test_cmd() {
   echo "Testing cli.sh output for our test command"
-  cd ..
   if [[ "$(./cli.sh)" != *"test-cmd"* ]]; then
     echo "FAIL: Test command test-cmd not found in cli.sh output."
     return 1
   fi
-  cd "$TEST_DIR" || { echo "Failed to cd back to tests directory"; return 1; }
 }
 
 # Example teardown function
 teardown() {
-  rm "$TEST_DIR/../commands/test-cmd.sh" || true
+  cd "$TESTROOT/.."
+  rm "./commands/test-cmd.sh" || true
 }
 ```
 
