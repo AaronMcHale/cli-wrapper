@@ -4,7 +4,6 @@ teardown() {
   cd "$TESTROOT/.." || return 1
   rm "commands/test-cmd.sh" || true
   rm "commands/test-cmd.help.txt" || true
-  rm "tests/cli-symlink.sh" || true
 }
 
 setup() {
@@ -17,7 +16,7 @@ setup() {
   echo 'echo "Test command executed"' > "commands/test-cmd.sh"
   echo "this is a test command" > "commands/test-cmd.help.txt"
   echo "this line should not show on the command list" >> "commands/test-cmd.help.txt"
-  ln -s cli.sh tests/cli-symlink.sh
+  ln -s "$PWD/cli.sh" "$TMPDIR/cli-symlink.sh" || return 1
 }
 
 test_cli_output_for_test_cmd() {
@@ -40,9 +39,9 @@ test_cli_from_tests_dir() {(
 )}
 
 test_cli_symlink_from_tests_dir() {(
-  echo "Testing cli.sh as a symlink from tests directory, to prove that it can be run as a symlink from anywhere"
+  echo "Testing cli.sh as a symlink from $TMPDIR, to prove that it can be run as a symlink from anywhere"
   # Test is run in a sub-shell, so we don't need to cd back.
-  cd "$TESTROOT" || return 1
+  cd "$TMPDIR" || return 1
   if [[ "$(./cli-symlink.sh)" != *"test-cmd"* ]]; then
     echo "FAIL: Test command test-cmd not found when running cli.sh as a symlink from tests dir"
     return 1
