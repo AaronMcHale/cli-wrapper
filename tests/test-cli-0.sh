@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 
 teardown() {
-  cd "$TESTROOT/.."
+  cd "$TESTROOT/.." || return 1
   rm "commands/test-cmd.sh" || true
   rm "commands/test-cmd.help.txt" || true
   rm "tests/cli-symlink.sh" || true
 }
 
 setup() {
-  TMPDIR="$(mktemp -d -t web-router-cli-wrapper-tests )" || {
+  TMPDIR="$(mktemp -d -t web-router-cli-wrapper-tests.XXXXXX )" || {
     echo "FAIL: could not generate temp dir." &&
     return 1
   }
   # Most tests here expect to be in the project root.
-  cd "$TESTROOT/.."
+  cd "$TESTROOT/.." || return 1
   echo 'echo "Test command executed"' > "commands/test-cmd.sh"
   echo "this is a test command" > "commands/test-cmd.help.txt"
   echo "this line should not show on the command list" >> "commands/test-cmd.help.txt"
@@ -28,26 +28,26 @@ test_cli_output_for_test_cmd() {
   fi
 }
 
-test_cli_from_tests_dir() {
+test_cli_from_tests_dir() {(
   echo "Testing running cli.sh from tests directory, to proove that it can be run from anywhere"
   # This test needs to be in a different directory from the project root
-  cd "$TESTROOT"
+  # Test is run in a sub-shell, so we don't need to cd back.
+  cd "$TESTROOT" || return 1
   if [[ "$(./../cli.sh)" != *"test-cmd"* ]]; then
     echo "FAIL: Test command test-cmd not found when running from tests dir."
     return 1
   fi
-  cd ..
-}
+)}
 
-test_cli_symlink_from_tests_dir() {
+test_cli_symlink_from_tests_dir() {(
   echo "Testing cli.sh as a symlink from tests directory, to prove that it can be run as a symlink from anywhere"
-  cd "$TESTROOT"
+  # Test is run in a sub-shell, so we don't need to cd back.
+  cd "$TESTROOT" || return 1
   if [[ "$(./cli-symlink.sh)" != *"test-cmd"* ]]; then
     echo "FAIL: Test command test-cmd not found when running cli.sh as a symlink from tests dir"
     return 1
   fi
-  cd ..
-}
+)}
 
 test_cli_list_output() {
   echo "Testing list sub-command to check output"

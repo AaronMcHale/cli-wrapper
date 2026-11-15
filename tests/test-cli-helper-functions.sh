@@ -3,7 +3,7 @@
 # Tests for warning, error, and success output formatting
 
 setup() {
-  cd "$TESTROOT/.."
+  cd "$TESTROOT/.." || return 1
   # Use Bash builtin printf to write the command script
   printf '%s\n' '#!/usr/bin/env bash' \
     'command_exists "formatting-test" && echo "formatting-test exists"' \
@@ -64,6 +64,6 @@ test_success_output() {
 }
 
 teardown() {
-  cd "$TESTROOT/.."
+  cd "$TESTROOT/.." || return 1
   rm -f "commands/formatting-test.sh" || true
 }
